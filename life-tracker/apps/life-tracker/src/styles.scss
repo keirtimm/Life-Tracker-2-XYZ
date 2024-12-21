@@ -1,1 +1,183 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+    /*
+      Our token system (Pragmatik) will consist of:
+      - Definition (base) tier token groups; these define the branding variables
+      - Mapping (interface) tier token groups; these define our branding rules
+      
+      I'm not going to overload the tokens to match the token spec found here:
+      https://www.w3.org/community/design-tokens/
+      This is a very heavy specification and we want something simple and lightweight.
+  
+      Predefine some rules like thicknesses and radii are x1, sizes/spaces are x2
+      We exclude transparencies for now and just stick with solid colors.
+      Number scaling is wasteful and unnecessary, and what provides more value is purpose driven token groups (for easy whitelabelling).
+      Exhaustive variants will bloat the system so we normalize the sets, and document how to use the groups.
+      Naming trips up many token system engineers, so we will use abbreviations only for fairly redundant organizational key segments, leaf keys will need to be full.
+      FIGMA Modes will require tokens carry their mode in their token key, 
+      Mapping tier tokens MUST ONLY reference Definition tokens (no one off values).
+  
+      ---------------------------------------------------------------------------------------------------
+      Definition Groupings (def. these should only be referenced by mapping variables):
+      ---------------------------------------------------------------------------------------------------
+      - 12x Palettes (Main, Support, Emphasis, Dull, Back, Fore, Done, Stop, Help, Warn, Must, Focus)
+      - Gaps (paragraphOuter, afterHeading, input, label, splitter, actions)
+      - Corners (Dialogs, Popups, Tooltips, Actions, Inputs, ...)
+      - Typography (Headings 1, 2, Text, Label, Help, ... )
+      - TODO (Alignments... headings, labels - right+top... investigate)
+  
+      Levels: Page -> BackPanelShadow -> BackPanel -> BackAction -> MidPanelShadow -> MidPanel -> MidAction -> ForePanelShadow -> ForePanel -> ForeAction
+  
+      Typeography will be variants of:
+      - fontSize
+      - fontFamily
+      - fontWeight
+      - (textDecoration will be for strikethrough and underlines)
+      - (font-style is only really italic for now)
+      - (letter-spacing matters more in headings)
+      - (line height only matters when wrapping text)
+      - (text-transform will impact readability)
+  
+      Order matters for CSS Variables so the Mapping tier will be underneath the Definition tier.
+  
+      ---------------------------------------------------------------------------------------------------
+      Mapping Groupings (map. these must only reference def. tier tokens and not have any custom values):
+      ---------------------------------------------------------------------------------------------------
+      I will keep these as simple as possible for now, this is a normalized (minimum redundancy) set of groupings.
+      These groups are re-useable across multiple components and reflect brand rules.
+      We also want the group attributes to correspond as closely to CSS values to reduce cognitive load.
+      - ColorGroup (backgroundColor, color, borderColor)
+      - FontGroup (fontFamily, fontSize, fontWeight, ...)
+      - PanelGroup (borderRadius, sidePadding, verticalPadding, ... )
+      - borderGroup (borderWidth, gap, borderColor) <- radius comes from panelGroup
+  
+      Its worth considering how Tailwind optimizes by "tree-shaking" out unnecessary styles during pre-compilation.
+      We don't have that implemented here but could make that a future goal to filter variables by used components.
+  
+      To test the accessibility of the color choices, we will need to create a page containing all our brand color groups.
+      These will build up slowly and all be tested. Changes to the branding will happen depending on the results.
+    */
+  
+    /* Burgeoning Token System */
+    --primary-400: #2cc5d2;
+    --primary-500: #26c6da;
+  
+    /* Typography */
+    --def-typ-hugeFamily: "Nunito Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --def-typ-largeFamily: "Nunito Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --def-typ-mediumFamily: "Nunito Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --def-typ-smallFamily: "Nunito Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --def-typ-ultraWeight: 900;
+    --def-typ-heavyWeight: 600;
+    --def-typ-normalWeight: 400;
+    --def-typ-lightWeight: 100;
+    --def-typ-xxlSize: 40px;
+    --def-typ-xlSize: 30px;
+    --def-typ-lSize: 24px;
+    --def-typ-mSize: 14px;
+    --def-typ-sSize: 12px;
+    --def-typ-xsSize: 8px;
+  
+    /* Borders are x1 */
+    --def-bor-input: 1px;
+    --def-bor-focus: 2px;
+    --def-bor-panel: 1px;
+    --def-bor-action: 2px;
+  
+    /* Gaps are x2 TODO name these differently */
+    --def-gap-beforeH1: 8px;
+    --def-gap-afterH1: 6px;
+    --def-gap-beforeH2: 6px;
+    --def-gap-afterH2: 4px;
+    --def-gap-afterInput: 8px;
+    --def-gap-barActions: 4px;
+    --def-gap-actionHeight: 40px;
+    --def-gap-actionInnerSidePad: 8px;
+    --def-gap-allFocus: 2px;
+    --def-gap-label: 4px;
+    --def-gap-paragraphPad: 8px;
+  
+    /* Corners are x1 */
+    --def-corner-input: 2px;
+    --def-corner-inputFocus: 2px;
+    --def-corner-panel: 5px;
+    --def-corner-tip: 2px;
+    --def-corner-popup: 5px;
+    --def-corner-dialog: 10px;
+    --def-corner-action: 99px;
+    --def-corner-actionFocus: 99px;
+      
+    /* Palettes */
+    --def-pal-main-50: #eae9fe;
+    --def-pal-main-200: #bab6fc;
+    --def-pal-main-400: #745df5;
+    --def-pal-main-500: #623bec;
+    --def-pal-main-900: #4120a9;
+  
+    --def-pal-support-50: #f0edfa;
+    --def-pal-support-200: #cec1f1;
+    --def-pal-support-400: #9b77db;
+    --def-pal-support-500: #905fd0;
+    --def-pal-support-900: #673b9c;
+  
+    --def-pal-emphasis-50: #d3ffeb;
+    --def-pal-emphasis-200: #69ffbb;
+    --def-pal-emphasis-400: #00f276;
+    --def-pal-emphasis-500: #00ca5e;
+    --def-pal-emphasis-900: #00753e;
+  
+    --def-pal-dull-50: #bfcad0;
+    --def-pal-dull-200: #6a818d;
+    --def-pal-dull-400: #45555f;
+    --def-pal-dull-500: #3c4850;
+    --def-pal-dull-900: #232a2e;
+  
+    --def-pal-fore-50: #FFFFFF;
+    --def-pal-fore-200: #FFFFFF;
+    --def-pal-fore-400: #FFFFFF;
+    --def-pal-fore-500: #FFFFFF;
+    --def-pal-fore-900: #FFFFFF;
+  
+    --def-pal-back-50: #a4ac9c;
+    --def-pal-back-200: #66705c;
+    --def-pal-back-400: #4f5849;
+    --def-pal-back-500: #41483d;
+    --def-pal-back-900: #31352e;
+  
+    --def-pal-done-50: #edf8cf;
+    --def-pal-done-200: #bfe76f;
+    --def-pal-done-400: #81b622;
+    --def-pal-done-500: #689818;
+    --def-pal-done-900: #415c18;
+  
+    --def-pal-stop-50: #ffc1c3;
+    --def-pal-stop-200: #ff595e;
+    --def-pal-stop-400: #fd050c;
+    --def-pal-stop-500: #d50006;
+    --def-pal-stop-900: #970c10;
+  
+    --def-pal-warn-50: #fff4c5;
+    --def-pal-warn-200: #ffd846;
+    --def-pal-warn-400: #ffa303;
+    --def-pal-warn-500: #e27a00;
+    --def-pal-warn-900: #984008;
+  
+    --def-pal-help-50: #d3f5fa;
+    --def-pal-help-200: #adebf4;
+    --def-pal-help-400: #35c2db;
+    --def-pal-help-500: #189ab4;
+    --def-pal-help-900: #1a6b84;
+  
+    --def-pal-must-50: #ffc1c3;
+    --def-pal-must-200: #ff595e;
+    --def-pal-must-400: #fd050c;
+    --def-pal-must-500: #d50006;
+    --def-pal-must-900: #970c10;
+  
+    --def-pal-focus-50: #ffead3;
+    --def-pal-focus-200: #ffb06d;
+    --def-pal-focus-400: #ff5f0a;
+    --def-pal-focus-500: #ff4500;
+    --def-pal-focus-900: #a1250b;
+  
+  }
